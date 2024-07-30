@@ -36,7 +36,7 @@ const signup = async (req, res, next) => {
   await newUser.save();
 
   res
-    .cookie("accessToken", accessToken, { secure: true })
+    .cookie("accessToken", accessToken, { httpOnly: true })
     .status(200)
     .json(rest);
 };
