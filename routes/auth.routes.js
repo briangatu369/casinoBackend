@@ -8,4 +8,4 @@ const router = express.Router();
 router.post("/signup", tryCatch(signup));
 router.post("/signin", tryCatch(signin));
 
-module.exports = { router: AuthRouter };
+module.exports = { AuthRouter: router };

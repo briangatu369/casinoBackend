@@ -1,3 +1,5 @@
+const CustomError = require("../utils/customErrors");
+
 const errorHandler = (error, req, res, next) => {
   if (error instanceof CustomError) {
     return res
@@ -5,7 +7,7 @@ const errorHandler = (error, req, res, next) => {
       .json({ status: error.status, message: error.message });
   }
 
-  res.status(500).json("Internal server error");
+  res.status(500).json(error);
 };
 
 module.exports = { errorHandler };
