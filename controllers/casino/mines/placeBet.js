@@ -55,6 +55,7 @@ const placeBet = async (req, res) => {
         "betDetails.hasMined": true,
         "betDetails.isBusted": true,
         "betDetails.hasCashedout": false,
+        $push: { "betDetails.indexOpened": index },
       },
       { new: true }
     );

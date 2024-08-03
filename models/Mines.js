@@ -16,5 +16,6 @@ const minesSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+const MinesGame = mongoose.model("MinesGame", minesSchema); // not intended for collection,intended to levearage minesSchema validation
 
-module.exports = { minesSchema };
+module.exports = { MinesGame };

@@ -1,4 +1,5 @@
 const BetHistory = require("../../../models/BetHistory");
+const { MinesGame } = require("../../../models/Mines");
 const User = require("../../../models/User.model");
 const CustomError = require("../../../utils/customErrors");
 
@@ -13,7 +14,7 @@ const generateGameOutcome = (bombs) => {
   const gameOutcome = new Array(gridSize).fill(1);
   const zeroIndices = new Set();
 
-  for (let i = 0; i < bombs; i++) {
+  while (zeroIndices.size < bombs) {
     const randomNumber = generateRamdomNumber(gridSize);
     zeroIndices.add(randomNumber);
   }
@@ -43,7 +44,7 @@ const startGame = async (req, res) => {
   //gameOutcome
   const gameOutcome = generateGameOutcome(bombs);
 
-  const newGame = {
+  const newGame = new MinesGame({
     stake,
     bombs,
     multiplier: 1,
@@ -52,7 +53,7 @@ const startGame = async (req, res) => {
     AccountBalance,
     tilesOpened: 0,
     gameResults: gameOutcome,
-  };
+  });
 
   const newMinesBet = new BetHistory({
     userId: _id,
