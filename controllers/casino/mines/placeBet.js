@@ -12,7 +12,7 @@ const calulateMultiplier = (tilesOpened, bombs, totalTiles) => {
 
     probability *= tileProbalility;
   }
-  console.log(probability);
+
   const multiplier = 1 / probability;
 
   return multiplier;
@@ -40,8 +40,8 @@ const placeBet = async (req, res) => {
     tilesOpened,
     AccountBalance,
   } = minesGame.betDetails;
-  const userId = minesGame.userId;
 
+  const userId = minesGame.userId;
   const hasCorrectPick = gameResults[index] === 1 ? true : false;
 
   // busted
@@ -104,5 +104,3 @@ const placeBet = async (req, res) => {
 };
 
 module.exports = { placeBet };
-
-console.log(calulateMultiplier(1, 5, 25));

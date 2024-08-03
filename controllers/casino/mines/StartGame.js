@@ -14,6 +14,7 @@ const generateGameOutcome = (bombs) => {
   const gameOutcome = new Array(gridSize).fill(1);
   const zeroIndices = new Set();
 
+  // ensure unique random bomb position
   while (zeroIndices.size < bombs) {
     const randomNumber = generateRamdomNumber(gridSize);
     zeroIndices.add(randomNumber);
@@ -36,12 +37,12 @@ const startGame = async (req, res) => {
 
   const user = await User.findOne({ username });
   const { AccountBalance } = user;
+  const notEnoughBalance = Number(stake) > AccountBalance;
 
-  if (Number(stake) > AccountBalance) {
+  if (notEnoughBalance) {
     throw new CustomError(400, `no enough balance,Balance: ${AccountBalance}`);
   }
 
-  //gameOutcome
   const gameOutcome = generateGameOutcome(bombs);
 
   const newGame = new MinesGame({
@@ -64,7 +65,7 @@ const startGame = async (req, res) => {
   await newMinesBet.save();
 
   const { betDetails, ...minesData } = newMinesBet._doc;
-  betDetails.gameResults = new Array(gridSize).fill(0);
+  betDetails.gameResults = new Array(gridSize).fill(0); // hide game results
   const minesDataToSend = { ...minesData, betDetails };
 
   res.status(200).json(minesDataToSend);
