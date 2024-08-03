@@ -5,6 +5,9 @@ const cookieParser = require("cookie-parser");
 const { AuthRouter } = require("./routes/auth.routes");
 const { connectDatabase } = require("./dataBase/connectDb");
 const { errorHandler } = require("./middleware/errorHandler");
+const { CasinoRouter } = require("./routes/casino.routes");
+const { tryCatch } = require("./utils/tryCatch");
+const { validateJwt } = require("./middleware/validateTokens");
 
 const app = express();
 dotenv.config(); // load .env variables
@@ -21,6 +24,7 @@ app.use(cookieParser());
 app.use(express.json());
 
 app.use("/api/auth", AuthRouter);
+app.use("/api/casino", tryCatch(validateJwt), CasinoRouter);
 app.use(errorHandler);
 
 const startServer = async () => {

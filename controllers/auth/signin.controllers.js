@@ -19,13 +19,13 @@ const signin = async (req, res, next) => {
 
   const user = await User.findOne({ email });
   if (!user) {
-    return CustomError(404, "user does not exist");
+    throw new CustomError(404, "user does not exist");
   }
 
   const hashedPassword = user.password;
   const isPasswordValid = await bcrypt.compare(password, hashedPassword);
   if (!isPasswordValid) {
-    CustomError(404, "wrong password");
+    throw new CustomError(404, "wrong password");
   }
 
   const { password: p, betList, ...rest } = user._doc;

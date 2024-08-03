@@ -29,8 +29,9 @@ const signup = async (req, res, next) => {
 
   const hashedPassword = hashPassword(password);
   const newUser = new User({ username, email, password: hashedPassword });
+  const userInfo = newUser._doc;
 
-  const { password: p, ...rest } = newUser._doc;
+  const { password: p, ...rest } = userInfo;
   const secretkey = process.env.JWTSECRET;
   const accessToken = generateJwt(rest, secretkey, { expiresIn: "1h" });
 
