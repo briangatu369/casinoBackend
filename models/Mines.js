@@ -11,6 +11,7 @@ const minesSchema = new mongoose.Schema(
     isBusted: { type: Boolean, default: false, required: true },
     hasCashedout: { type: Boolean, default: false, required: true },
     tilesOpened: { type: Number, default: 0, required: true },
+    indexOpened: { type: [Number] },
     gameResults: { type: [Number], required: true },
   },
   { timestamps: true }

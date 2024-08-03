@@ -36,7 +36,7 @@ const placeBet = async (req, res) => {
     bombs,
     multiplier,
     payout,
-    hasMined,
+    indexOpened,
     tilesOpened,
     AccountBalance,
   } = minesGame.betDetails;
@@ -62,7 +62,20 @@ const placeBet = async (req, res) => {
     return res.status(200).json(newBetDetails);
   }
 
-  //update game data
+  //repeated index
+  for (i = 0; i < indexOpened?.length; i++) {
+    if (indexOpened[i] === index) {
+      throw new CustomError(400, "tile already choosen:pick a new tile");
+    }
+  }
+
+  // completed the grid
+  const maxTilesToOpen = 25 - bombs;
+  if (tilesOpened >= maxTilesToOpen) {
+    return res.status(200).json("cash out");
+  }
+
+  //game is on going
   tilesOpened += 1;
   multiplier = calulateMultiplier(tilesOpened, bombs, 25);
   multiplier.toFixed(2);
@@ -74,11 +87,17 @@ const placeBet = async (req, res) => {
       "betDetails.multiplier": multiplier,
       "betDetails.payout": payout,
       "betDetails.tilesOpened": tilesOpened,
+      $push: { "betDetails.indexOpened": index },
     },
     { new: true }
   );
 
   const newGameResult = new Array(25).fill(0);
+  const indicesOpened = newBetDetails.betDetails.indexOpened;
+  indicesOpened.forEach((index) => {
+    newGameResult[index] = 1;
+  });
+  newBetDetails.betDetails.gameResults = newGameResult;
 
   return res.status(200).json(newBetDetails);
 };
