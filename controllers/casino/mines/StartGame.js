@@ -48,7 +48,9 @@ const startGame = async (req, res) => {
     bombs,
     multiplier: 1,
     payout: 0,
-    hasMinded: false,
+    hasMined: false,
+    AccountBalance,
+    tilesOpened: 0,
     gameResults: gameOutcome,
   };
 
