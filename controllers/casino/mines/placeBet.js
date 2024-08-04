@@ -79,13 +79,14 @@ const placeBet = async (req, res) => {
   //game is on going
   tilesOpened += 1;
   multiplier = calulateMultiplier(tilesOpened, bombs, 25);
-  multiplier.toFixed(2);
-  payout = multiplier * stake;
+  const formattedMultiplier = Number(multiplier.toFixed(2));
+  console.log(multiplier);
+  payout = Number((multiplier * stake).toFixed(2));
 
   const newBetDetails = await BetHistory.findByIdAndUpdate(
     gameId,
     {
-      "betDetails.multiplier": multiplier,
+      "betDetails.multiplier": formattedMultiplier,
       "betDetails.payout": payout,
       "betDetails.tilesOpened": tilesOpened,
       $push: { "betDetails.indexOpened": index },
