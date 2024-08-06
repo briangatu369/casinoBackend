@@ -2,7 +2,7 @@ const CustomError = require("../utils/customErrors");
 
 const errorHandler = (error, req, res, next) => {
   if (error.name === "JsonWebTokenError") {
-    if (Error.name === "TokenExpiredError") {
+    if (error.name === "TokenExpiredError") {
       return res.status(401).json({ message: "session has expired" });
     }
     return res.status(401).json({ message: "invalid token" });

@@ -72,15 +72,32 @@ const placeBet = async (req, res) => {
 
   // completed the grid
   const maxTilesToOpen = 25 - bombs;
-  if (tilesOpened >= maxTilesToOpen) {
-    return res.status(200).json("cash out");
+  if (tilesOpened + 1 >= maxTilesToOpen) {
+    // cashout logic
+    multiplier = calulateMultiplier(tilesOpened, bombs, 25);
+    const formattedMultiplier = Number(multiplier.toFixed(2));
+    payout = Number((multiplier * stake).toFixed(2));
+
+    const newBetDetails = await BetHistory.findByIdAndUpdate(
+      gameId,
+      {
+        "betDetails.multiplier": formattedMultiplier,
+        "betDetails.payout": payout,
+        "betDetails.hasMined": true,
+        "betDetails.hasCashedout": true,
+        "betDetails.tilesOpened": tilesOpened + 1,
+        $push: { "betDetails.indexOpened": index },
+      },
+      { new: true }
+    );
+    console.log(newBetDetails);
+    return res.status(200).json(newBetDetails);
   }
 
   //game is on going
   tilesOpened += 1;
   multiplier = calulateMultiplier(tilesOpened, bombs, 25);
   const formattedMultiplier = Number(multiplier.toFixed(2));
-  console.log(multiplier);
   payout = Number((multiplier * stake).toFixed(2));
 
   const newBetDetails = await BetHistory.findByIdAndUpdate(

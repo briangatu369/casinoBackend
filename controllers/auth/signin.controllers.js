@@ -28,7 +28,7 @@ const signin = async (req, res, next) => {
     throw new CustomError(404, "wrong password");
   }
 
-  const { password: p, betList, ...rest } = user._doc;
+  const { password: p, ...rest } = user._doc;
   const secretkey = process.env.JWTSECRET;
   const accessToken = generateJwt(rest, secretkey, { expiresIn: "30d" });
   res.cookie("accessToken", accessToken, { httpOnly: true }).json(rest);
